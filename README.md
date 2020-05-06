@@ -1,6 +1,6 @@
 # trails
 
-Time tracker
+Time tracker application built on Flutter to track daily activities
 
 ## Getting Started
 
