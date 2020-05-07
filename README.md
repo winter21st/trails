@@ -2,7 +2,7 @@
 
 Time tracker application built on Flutter to track daily activities
 
-![night mode](/screenshots/night_mode.png?raw=true =250x250 "Night mode")
+![night mode](/screenshots/night_mode.png?raw=true "Night mode"){:height="50%" width="50%"}
 
 ## Getting Started
 
