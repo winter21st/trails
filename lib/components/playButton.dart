@@ -26,8 +26,9 @@ class _PlayButtonState extends State<PlayButton>
   @override
   Widget build(BuildContext context) {
     var snapToEnd = true;
+    var isStopped = true;
     var isReset = true;
-    var animation = AnimationName.RUNNING_CANCELLED;
+    var animation = AnimationName.CANCELLED;
     double containerWidth = 200;
     double containerHeight = 100;
 
@@ -43,33 +44,54 @@ class _PlayButtonState extends State<PlayButton>
             if (value.isRunning) {
               if (leftSideTouched) {
                 value.stop();
+                isStopped = false;
                 isReset = false;
                 animation = AnimationName.PAUSED;
               } else if (rightSideTouched) {
-                value.reset();
-                isReset = true;
-                animation = AnimationName.RUNNING_CANCELLED;
+                value.stop();
+                isStopped = true;
+                isReset = false;
+                animation = AnimationName.RUNNING_STOPPED;
               }
-            } else if (!value.isRunning && !isReset) {
+            } else if (!value.isRunning && !isStopped) {
               if (leftSideTouched) {
                 value.start();
+                isStopped = false;
                 isReset = false;
                 animation = AnimationName.RESUME;
               } else if (rightSideTouched) {
-                value.reset();
-                isReset = true;
-                animation = AnimationName.PAUSED_CANCELLED;
+                value.stop();
+                isStopped = true;
+                isReset = false;
+                animation = AnimationName.PAUSED_STOPPED;
               }
-            } else if (!value.isRunning && isReset) {
-              value.start();
-              animation = AnimationName.RUNNING;
+            } else if (!value.isRunning && isStopped) {
+              if(isReset){
+                value.start();
+                isStopped = false;
+                isReset = false;
+                animation = AnimationName.RUNNING;
+              }
+              if (leftSideTouched) {
+                value.stop();
+                value.reset();
+                isStopped = true;
+                isReset = true;
+                animation = AnimationName.CANCELLED;
+              } else if (rightSideTouched) {
+                value.stop();
+                value.reset();
+                isStopped = true;
+                isReset = true;
+                animation = AnimationName.CANCELLED;
+              }
             }
           },
           child: Container(
             height: containerHeight,
             width: containerWidth,
             child: FlareActor(
-              'assets/animations/Trails.flr',
+              'assets/animations/TrailsAnimation.flr',
               animation: chooseAnimation(animation),
               snapToEnd: snapToEnd,
             ),
@@ -90,14 +112,17 @@ class _PlayButtonState extends State<PlayButton>
       case AnimationName.RESUME:
         return 'Resume';
         break;
-      case AnimationName.RUNNING_CANCELLED:
-        return 'RunningCancelled';
+      case AnimationName.RUNNING_STOPPED:
+        return 'RunningStopped';
         break;
-      case AnimationName.PAUSED_CANCELLED:
-        return 'PausedCancelled';
+      case AnimationName.PAUSED_STOPPED:
+        return 'PausedStopped';
+        break;
+      case AnimationName.CANCELLED:
+        return 'Cancelled';
         break;
       default:
-        return 'RunningCancelled';
+        return 'Cancelled';
     }
   }
 
@@ -112,6 +137,7 @@ enum AnimationName {
   RUNNING,
   PAUSED,
   RESUME,
-  PAUSED_CANCELLED,
-  RUNNING_CANCELLED,
+  PAUSED_STOPPED,
+  RUNNING_STOPPED,
+  CANCELLED
 }
