@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class TrailsTimer extends ChangeNotifier {
   Stopwatch _stopwatch = Stopwatch();
+  bool isReset = false;
 
   void start() {
     _stopwatch.start();
+    isReset = false;
     notifyListeners();
   }
 
@@ -15,6 +17,7 @@ class TrailsTimer extends ChangeNotifier {
 
   void reset() {
     _stopwatch.reset();
+    isReset = true;
     ChangeNotifier();
   }
 

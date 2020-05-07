@@ -37,6 +37,15 @@ class _TimeDisplayState extends State<TimeDisplay> {
             Provider.of<TrailsTimer>(context, listen: false).getMilliSecond();
       });
     }
+    else if(Provider.of<TrailsTimer>(context, listen: false).isReset){
+      setState(() {
+        hour = Provider.of<TrailsTimer>(context, listen: false).getHour();
+        minute = Provider.of<TrailsTimer>(context, listen: false).getMinute();
+        second = Provider.of<TrailsTimer>(context, listen: false).getSecond();
+        milliSecond =
+            Provider.of<TrailsTimer>(context, listen: false).getMilliSecond();
+      });
+    }
   }
 
   @override
